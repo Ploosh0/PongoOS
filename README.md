@@ -1,4 +1,4 @@
-# pongoOS
+# pongoOS (with dtpatcher)
 
 A pre-boot execution environment for Apple boards built on top of checkra1n.
 
