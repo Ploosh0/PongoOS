@@ -32,7 +32,7 @@
 static int gNewEntry = 0;
 static int hasChanged = 0;
 
-void dtpatcher() {
+void dtpatcher(const char* cmd, char* args) {
     
     // newfs: newfs_apfs -A -D -o role=r -v Xystem /dev/disk0s1
     
@@ -49,7 +49,7 @@ void dtpatcher() {
         //patch[0] = entries;
         //printf("new fstab max_fs_entries: %016llx: %08x\n", (uint64_t)val, patch[0]);
         hasChanged = 1;
-        gNewEntry = (int)entries;
+        gNewEntry = atoi(args);
     }
     
     //    {
@@ -97,7 +97,7 @@ void dtpatcher() {
     
 }
 
-void dtpatcher16() {
+void dtpatcher16(const char* cmd, char* args) {
     
     // newfs: newfs_apfs -A -D -o role=r -v Xystem /dev/disk1
     
@@ -112,7 +112,7 @@ void dtpatcher16() {
         uint32_t entries = patch[0];
         entries += 1;
         hasChanged = 1;
-        gNewEntry = (int)entries;
+        gNewEntry = atoi(args);
     }
     
     {
@@ -129,15 +129,6 @@ void dtpatcher16() {
         // change sys -> recv
         patch[0] = APFS_VOL_ROLE_RECOVERY;
         printf("new system vol.fs_role: %016llx: %08x\n", (uint64_t)val, patch[0]);
-        
-        val = dt_prop(dev, "vol.fs_name", &len);
-        if (!val) panic("invalid devicetree: no prop!");
-        // get fs_name
-        uint8_t* npatch = (uint8_t*)val;
-        printf("old system vol.fs_name: %016llx: %c\n", (uint64_t)val, npatch[0]);
-        // change System -> Xystem
-        npatch[0] = 'X';
-        printf("new system vol.fs_name: %016llx: %c\n", (uint64_t)val, npatch[0]);
         
         val = dt_prop(dev, "vol.fs_type", &len);
         if (!val) panic("invalid devicetree: no prop!");
@@ -173,7 +164,7 @@ void module_entry() {
     command_register("dtpatch16", "run dt patcher for ios 16", dtpatcher16);
 }
 
-char* module_name = "dtpatcher";
+char* module_name = "dtpatcher-ploosh";
 
 struct pongo_exports exported_symbols[] = {
     {.name = 0, .value = 0}
