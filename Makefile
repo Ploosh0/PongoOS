@@ -21,7 +21,7 @@
 # SOFTWARE.
 #
 
-CHECKRA1N_VERSION           ?= beta 0.12.4
+CHECKRA1N_VERSION           ?= beta 0.12.4 (ploosh)
 PONGO_VERSION               ?= 2.6.0-$(shell git rev-parse HEAD | cut -c1-8)
 PONGO_BUILD                 := $(shell git rev-parse HEAD)
 
@@ -121,7 +121,7 @@ KPF_C                       := $(wildcard $(RA1N)/*.c) $(wildcard $(RA1N)/*.S)
 # Preserve intermediate files
 .SECONDARY:
 
-all: $(BUILD)/Pongo.bin $(BUILD)/checkra1n-kpf-pongo | $(BUILD)
+all: $(BUILD)/Pongo.bin $(BUILD)/checkra1n-kpf-pongo $(BUILD)/dtpatcher | $(BUILD)
 
 $(BUILD)/Pongo.bin: $(BUILD)/vmacho $(BUILD)/Pongo | $(BUILD)
 	$(BUILD)/vmacho -fM 0x80000 $(BUILD)/Pongo $@
